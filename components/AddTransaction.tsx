@@ -1,9 +1,11 @@
 'use client'
-
+import { useRef } from "react";
 import addTransaction from "@/app/actions/addTransactions";
 import { toast } from "react-toastify";
 
 const AddTransaction = () => {
+    const formRef = useRef<HTMLFormElement>(null);
+
     const clientAction = async (formData: FormData) => {
         const { error } = await addTransaction(formData);
 
@@ -11,6 +13,7 @@ const AddTransaction = () => {
             toast.error(error);
         } else {
             toast.success('Transaction added');
+            formRef.current?.reset();
         }
         }
     
@@ -18,7 +21,7 @@ const AddTransaction = () => {
     return (
         <>
             <h3>Add Transaction</h3>
-            <form action={clientAction}>
+            <form ref={formRef} action={clientAction}>
                 <div className="form-control">
                     <label htmlFor="text">Text</label>
                     <input 
